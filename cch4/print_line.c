@@ -6,16 +6,22 @@
 int	is_pattern_present(char[], char[], int); 
 int getLine(char[]);
 int strindex(char[], char[]);
+/*the same as strindex just from the right side*/
+
+int r_strindex(char[], char[]);
 
 char pattern[] = "ould";
 int main() {
 	char line[MAXSIZE];
+	int idx;
+
 	while (getLine(line)) {
 		/*if (is_pattern_present(line, pattern, strlen(line))
 			printf("%s", line);
 		*/
-		if (strindex(line, pattern)>= 0) {
+		if ((idx = r_strindex(line, pattern))>= 0) {
 			printf("%s", line);	
+			printf("%d\n", idx);
 		}
 	}			
 	return 0;
@@ -58,5 +64,16 @@ int strindex(char line[], char pattern[]) {
 	
 	}
 	return -1;
-
 }	
+
+int r_strindex(char line[], char pattern[]) {
+	int i, j , k, c;
+	for (i = strlen(line) - 1; i >= 0; i--) {
+		for (j = i, k = strlen(pattern) - 1; line[j] == pattern[k] && j >= 0 && k >= 0; k--, j--) {
+			if (k == 0) {
+				return j;
+			}	
+		}	
+	}
+	return -1;
+}
