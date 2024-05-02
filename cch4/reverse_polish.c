@@ -24,13 +24,11 @@ int main() {
 				push(atof(s));
 				break;
 			case '+':
-				top_duplicate();	
+				//top_duplicate();	
 				//top_swap();
 				stack_print();
 				top_print();
 				push(pop() + pop());
-				stack_clear();
-				stack_print();
 				break;
 			case '*':
 				push(pop() * pop());
@@ -52,6 +50,10 @@ int main() {
 					 push(fmod(pop(), op2));
 				else
 					printf("Error: division with 0");
+				break;
+			case '^':
+				op2 = pop();
+				push(pow(pop(), op2));
 				break;
 			case '\n':
 				printf("\t%.8g\n", pop());
