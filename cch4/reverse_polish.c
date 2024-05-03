@@ -2,8 +2,12 @@
 #include<stdlib.h>
 #include<ctype.h>
 #include<math.h>
+#include<string.h>
+
 #define MAXOP 100
 #define NUMBER '0'
+#define EXPRESSION '1'
+#define VARIABLE '2'
 
 int getop(char[]);
 void push(double);
@@ -13,21 +17,22 @@ void top_swap(void);
 void top_duplicate(void);
 void stack_print(void);
 void stack_clear(void);
+void decipher_names(char[]);
 
 int main() {
 	int type;
 	double op2;
 	char s[MAXOP];
+	printf("%g\n", sin(3));
 	while ((type = getop(s)) != EOF) {
 		switch (type) {
+			case EXPRESSION:
+				decipher_names(s);
+				break;
 			case NUMBER:
 				push(atof(s));
 				break;
 			case '+':
-				//top_duplicate();	
-				//top_swap();
-				stack_print();
-				top_print();
 				push(pop() + pop());
 				break;
 			case '*':
@@ -58,6 +63,21 @@ int main() {
 			case '\n':
 				printf("\t%.8g\n", pop());
 				break;
+			case 'x':
+				stack_clear();
+				break;
+			case '#':
+				top_duplicate();
+				break;	
+			case '@':
+				top_print();
+				break;
+			case '?':
+				stack_print();
+				break;
+			case '~':
+				top_swap();
+				break;
 			default:
 				printf("Error: unknown operation");
 				break;
@@ -65,7 +85,17 @@ int main() {
 	}
 	return 0;
 }
-
+void decipher_names(char s[]) {
+	if (!strcmp("exp", s)) {
+		push(exp(pop()));
+	} else if (!strcmp("sin", s)) {
+		push(sin(pop()));
+	} else if (!strcmp("cos", s)) {
+		push(cos(pop()));
+	} else {
+		push(s[0] - 'A');
+	}
+}
 #define MAXVAL 100
 
 int stack_pointer = 0;
@@ -116,13 +146,21 @@ double pop(void) {
 
 int getch(void);
 void ungetch(int);
-
 int getop(char s[]) {
 	int i, c;
 	
 	while ((s[0] = c = getch()) == ' ' || c == '\t')
 		;
 	s[1] = '\0';
+	if (isalpha(c)) {
+		i = 0;
+		while (isalpha(s[i++] = c)) {
+			c = getch();	
+		}
+		s[i-1] = '\0';
+		if (c != EOF) ungetch(c);
+		return EXPRESSION;
+	}
 	if (!isdigit(c) && c != '.' && c != '-')
 		return c;
 	i = 0;
