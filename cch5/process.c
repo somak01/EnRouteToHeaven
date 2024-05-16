@@ -9,6 +9,7 @@ int getch() {
 void ungetch(int c) {
 	if (b_pointer < BUFFER_SIZE) {
 		BUFFER[b_pointer++] = c;
+		printf("\nWhat the hell\n");
 	} else {
 		printf("error: buffer overflow\n");
 	}
